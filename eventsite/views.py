@@ -148,7 +148,6 @@ def this_week_rss(request):
 
 
 
-@cache_page(60 * 10)
 @site_required
 def front_page(request, tag=None):
     start=request.site.today

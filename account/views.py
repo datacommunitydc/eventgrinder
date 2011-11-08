@@ -50,7 +50,6 @@ def save_profile(profile, form):
     profile.slug=unicode(slugify(nickname))
     profile.confirmed_at=datetime.now()
     profile.link=form.cleaned_data['link'] or None
-    profile.subscribes=form.cleaned_data['subscribe']
     profile.put()
     if profile.subscribes:
         site=get_site()

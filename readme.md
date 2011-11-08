@@ -1,6 +1,6 @@
 #What is this crazy thing?
 
-This is the current, production version of "Eventgrinder"-- which runs some calendar aggregator sites, like dctechevents.com
+This is a "cleanup" branch of "Eventgrinder"-- which runs some calendar aggregator sites, like dctechevents.com
 
 #Whatgrinder?
 
@@ -13,8 +13,6 @@ Lot's of reasons! Here's a few:
 * I didn't concieve of it as open source, and it never occured to me that someone else might see the code.
 * Testing? LOL
 * There are a lot of half-implemented ideas in the code. 
-* It only runs on AppEngine
-* It's written in at least two frameworks (Django and Tipfy), with a little bit of hacky WSGI middleware thrown in for reasons I forget.
 
 # What is most broken?
 

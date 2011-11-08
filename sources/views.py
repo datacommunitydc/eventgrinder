@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.contrib import messages
-
+from models import ICalendarSource
 from forms import ICalendarEditForm, ICalApprovalForm
 from account.utility import profile_required, userlevel_required
 from eventsite import site_required

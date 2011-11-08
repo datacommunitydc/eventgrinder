@@ -11,19 +11,15 @@ timezones=sorted(zip(common_timezones_set,common_timezones_set))
 class SiteCreateForm(forms.Form):
     name = forms.CharField(max_length=255, required=True)
     timezone=forms.ChoiceField(choices=timezones)
-    slug=forms.CharField(max_length=255, required=True)
-    audience=forms.CharField(max_length=255, required=True)
+
+
     
 class SiteDetailsForm(forms.Form):
     name = forms.CharField(max_length=255, required=True)
     timezone=forms.ChoiceField(choices=timezones)
-    audience=forms.CharField(max_length=255, required=True)
-    google_analytics_code=forms.CharField(max_length=255, required=False)
-    google_site_verification=forms.CharField(max_length=255, required=False)
     twitter=forms.CharField(max_length=255, required=False)
-    bsa_code=forms.CharField(max_length=255, required=False, widget=forms.Textarea)
     offline=forms.BooleanField(required=False)
-    hostnames=forms.CharField(max_length=255, required=False)
+
     
     
     def clean_hostnames(self):

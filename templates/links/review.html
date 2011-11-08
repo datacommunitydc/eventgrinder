@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load cdn_helper %}
+
+
+{% block content %}
+<div class="row">
+	<div class="cell position-0 width-16">
+<h2>Review community links</h2>
+
+
+	</div>
+</div>
+
+
+
+<div class="row">
+	<div class="cell position-0 width-8">
+	<h3>Submitted Links</h3>
+	{% for link in submitted_links %}
+	{{link.name}}<br/>
+	{{ link.href }}
+	<form method="POST">
+	<input type="hidden" name="id" value="{{ link.key.id }}"/>
+	set to:<input type="submit" value="approved" name='action'>
+	</form><br/>
+	{% empty %}
+	no submitted links
+	{% endfor %}
+	<h3>Approved links</h3>
+		{% for link in approved_links %}
+	{{link.name}}<br/>
+	{{ link.href }}
+	<form method="POST">
+	<input type="hidden" name="id" value="{{ link.key.id }}"/>
+	set to:<input type="submit" value="submitted" name='action'>
+	</form><br/>
+	{% empty %}
+	No approved links
+	
+	{% endfor %}
+
+	</div>
+	<div class="cell position-8 width-8">
+		
+	</div>
+
+</div>
+
+
+{% endblock %}

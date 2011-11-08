@@ -97,7 +97,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     #'messaging.messaging_context'
 )
 
-ROOT_URLCONF = 'django_urls'
+ROOT_URLCONF = 'urls'
 
 ROOT_PATH = os.path.dirname(__file__)
 

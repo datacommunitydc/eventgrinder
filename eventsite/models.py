@@ -30,7 +30,6 @@ class Eventsite(db.Model):
     original_logo_version=db.IntegerProperty()
     logo=db.BlobProperty()
     logo_asset_href=db.StringProperty()
-    audience=db.TextProperty(required=False)
     google_analytics_code=db.TextProperty(required=False)
     google_site_verification=db.TextProperty(required=False)
     disqus_shortname=db.TextProperty(required=False)

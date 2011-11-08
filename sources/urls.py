@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from views import add_source, sources, manage_sources, save_ical, start_fetch_icals, opml, json
-from tasks import fetch_icals, split_ical, split_gdata
+from tasks import fetch_icals
 
 
 urlpatterns = patterns('events',
@@ -11,8 +11,6 @@ urlpatterns = patterns('events',
       url(r'^add/$', add_source, name="add-source"),
       url(r'^save/$', save_ical, name="save-ical"),
       url(r'^fetch/$', fetch_icals, name="fetch-icals-task"),
-      url(r'^split_gdata/$', split_gdata ),
-      url(r'^split_ical/$', split_ical, name="split_ical"),
       url(r'^start_fetch_icals/$',start_fetch_icals )
 
 )

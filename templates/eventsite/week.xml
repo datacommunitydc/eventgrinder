@@ -6,7 +6,6 @@
       <atom:link href="http://{{site.host}}/thisweek.xml" rel="self" type="application/rss+xml" />
       <language>en-us</language> 
       <webMaster>rosskarchner@gmail.com (Ross Karchner)</webMaster> 
-      <description> a calendar for {{site.audience}}</description>
       <item>   
       <title>This Week on {{ site.name }}</title> 
          <link>http://{{site.host}}/week-of/{{start|date:"c"}}</link> 

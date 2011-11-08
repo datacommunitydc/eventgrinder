@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load cdn_helper %}
+
+
+{% block content %}
+<div class="row">
+	<div class="cell position-0 width-16">
+<h2>submit a community link</h2>
+
+
+	</div>
+</div>
+
+<form method="POST" class="egform">
+
+<div class="row">
+	<div class="cell position-0 width-8">
+	<fieldset>
+		<div class="field">{{form.name.label_tag}}
+		{{form.name}} {{form.name.help_text}}
+		{{form.name.errors}}	
+		</div>
+		<div class="field">{{form.href.label_tag}}
+		{{form.href}} <span class="help">{{form.href.help_text}}</span>
+		{{form.href.errors}}	
+		</div>
+	
+	
+	</fieldset>
+		<div style="text-align:right">	<input type="submit" value="Save"></div>
+
+	</div>
+	<div class="cell position-8 width-8">
+		
+	</div>
+
+</div>
+
+
+{% endblock %}

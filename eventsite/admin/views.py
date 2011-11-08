@@ -37,10 +37,9 @@ def create_site(request):
         if form.is_valid():
             new_site=models.Eventsite(name=form.cleaned_data['name'].strip(),
                                     timezone= form.cleaned_data['timezone'].strip(),
-                                    audience=form.cleaned_data['audience'].strip(),
                                     hostnames=[hostname,],
                                     key_name=hostname,
-                                    slug=form.cleaned_data['slug'])
+                                    slug=str(slugify(hostname)))
             new_site.put()
             return HttpResponseRedirect(reverse('admin-home'))
     return render_to_response('eventsite/admin.html', locals(), context_instance=RequestContext(request))
@@ -66,12 +65,7 @@ def edit_site(request):
         if form.is_valid(): # All validation rules pass
             site.name=form.cleaned_data['name'].strip()
             site.timezone= form.cleaned_data['timezone'].strip()
-            site.audience=form.cleaned_data['audience'].strip()
-            site.hostnames=form.cleaned_data['hostnames']
-            site.google_site_verification=form.cleaned_data['google_site_verification'].strip()
-            site.google_analytics_code=form.cleaned_data['google_analytics_code'].strip()
             site.twitter=form.cleaned_data['twitter'] or None
-            site.bsa_code=form.cleaned_data['bsa_code'] or None
             site.offline=form.cleaned_data['offline'] or None
             site.put()
             site.expire_assets()
@@ -81,7 +75,7 @@ def edit_site(request):
         site=get_site()
         if site:
             site_details={'name':site.name, 'timezone':site.timezone, 'slug':site.slug,
-            'audience': site.audience, 'hostnames':",".join(site.hostnames),
+            'hostnames':",".join(site.hostnames),
             'google_analytics_code':site.google_analytics_code,
             'google_site_verification':site.google_site_verification,
             'twitter':site.twitter,

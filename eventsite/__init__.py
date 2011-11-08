@@ -23,7 +23,7 @@ def get_site(key_name=None):
 def site_required(func):
     def no_site(request, *args, **kwargs):
     	if not request.site:
-        	return HttpResponse("No calendar with that name exists (yet!)")
+        	return HttpResponseRedirect("/admin/create/")
     	else:
         	return HttpResponse("%s will return soon!" % request.site.name)
 

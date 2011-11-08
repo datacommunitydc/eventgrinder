@@ -1,22 +1,29 @@
-application: techevents
-version: cleanup
-runtime: python
+application: eventgrinder2
+version: cleanup2
+runtime: python27
 api_version: 1
+threadsafe: true
+
+libraries:
+- name: PIL
+  version: "1.1.7"
+- name: django
+  version: "1.2"
+
+
 
 handlers:
-
-
 - url: /static/([^/]*)/(.*)
   static_files: static/\2
   upload: static/(.*)
   expiration: "24d"
   
 - url: /tasks.*
-  script: main.py
+  script: main.application
   login: admin
 
 - url: .*
-  script: main.py
+  script: main.application
   
 builtins:
 - datastore_admin: on

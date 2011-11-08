@@ -15,7 +15,6 @@ from html5.forms import URLInput, DateInput, TextInput, EmailInput
 class ProfileForm(forms.Form):
     nickname = forms.CharField(max_length=255, help_text="What you want to be known as on the site")
     email=forms.EmailField(required=True, help_text="Where should we send email?", widget=EmailInput)
-    subscribe = forms.BooleanField(required=False, help_text="Do you want to get the weekly events email?")
     link=forms.URLField(required=False, help_text="This can be the URL of your blog, twitter page, LinkedIn profile, homepage, or anything else.", 
                         widget=TextInput(attrs={'placeholder':'http://whatever'}))
 

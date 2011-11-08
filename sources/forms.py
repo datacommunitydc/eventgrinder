@@ -21,6 +21,7 @@ class ICalendarEditForm(forms.Form):
     source_key=forms.CharField(required=False)
                  
     def save(self):
+        from models import ICalendarSource
         cleaned_data=self.cleaned_data
         profile=get_current_profile()
         from models import ICalendarSource

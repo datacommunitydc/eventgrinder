@@ -1,7 +1,6 @@
 import datetime
 from google.appengine.ext import db
 from google.appengine.api import users
-from sources.models import ICalendarSource
 from eventsite.models import Eventsite
 from account.models import Profile
 from utility import slugify
