@@ -54,11 +54,9 @@
 	</div>
     <div class="row"><h1>
 		<a href="{% url front-page %}">
-			{% if site.logo_asset_href %}
-			<img src="{% versioned site.logo_asset_href site.original_logo_version %}" alt="{{ site.name }}">
-			{% else %}
+			
 			{{ site.name }}
-			{% endif %}
+		
 			</a>
 	</h1></div>
 	
@@ -76,7 +74,7 @@
 {% endblock %}
 <div class="row" id="footer">
 	<div class="row">
-	<p> {{ site.name }} is made with <a href="http://eventgrinder.com/">EVENTGRINDER</a>.</p>
+	<p> {{ site.name }} is made with:<a href="https://github.com/rosskarchner/eventgrinder">eventgrinder</a></p>
 	</div>
 </div>
    </BODY>

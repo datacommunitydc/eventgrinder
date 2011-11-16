@@ -30,15 +30,7 @@ div{margin:10px;}
 
 </head>
 <body>
-	
-		
-			{% if site.logo_asset_href %}
-			<img src="{{site.logo_asset_href }}" alt="{{ site.name }}">
-			{% else %}
-			{{ site.name }}
-			{% endif %}
-			
-			
+
 <h1> <a href="http://{{site.host}}{% url front-page %}">{{ site.name }} for the week of {{ start|date:"F j, Y"}}</a></h1>
 
 

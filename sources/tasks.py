@@ -48,6 +48,7 @@ def process_gdata(source):
 
 
 def fetch_icals(request):
+    from models import ICalendarSource
     try:
         if request.method == 'POST':
             cursor=request.POST.get('cursor')
