@@ -19,21 +19,6 @@ $(function() {
     	max_chars: 250
     });
     
-
-
-
-    if ($("#id_description").val() == ""){
-		    $("#event_description").hide();
-		    var add_descriptions;
-		    add_days=$('<div><em>No link? You can <a href="#">add an short description instead</a></em>.</div>').click(function(){
-		        $("#event_description").show()
-		        $(this).hide();
-		        return false;
-		    })
-		    
-		    $("#link").append(add_days)
-		}
-
     
     if ($("#end_date input").val() == ""){
 		    $("#end_date").hide();

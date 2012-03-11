@@ -3,6 +3,7 @@ import os, os.path
 from logging import error
 
 
+sys.path= [os.path.join(os.path.dirname(__file__), 'shared'), os.path.join(os.path.dirname(__file__), '.')]+sys.path
 
 
 

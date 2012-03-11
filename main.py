@@ -2,7 +2,6 @@ import sys, os
 from google.appengine.ext.webapp import util
 
 
-sys.path= [os.path.join(os.path.dirname(__file__), 'shared'), os.path.join(os.path.dirname(__file__), '.')]+sys.path
 
 
 # Django imports and other code go here...
