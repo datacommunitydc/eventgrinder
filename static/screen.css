@@ -10,7 +10,7 @@ table,tbody,tr,td{border-color:white;}
 #events #thisweek{margin-bottom:5px;}#events #thisweek .addthis_toolbox{margin-bottom:5px;}
 #events #thisweek h2{margin:2px 0px 0px -5px;font-size:.8em;float:left;width:80px;text-align:right;color:gray;font-weight:normal;}
 #events #thisweek h3{margin-top:15px;margin-bottom:15px;}
-#events #thisweek .vevent{font-size:1.0em;margin-left:90px;max-width:28em;}#events #thisweek .vevent .details{font-size:.7em;}
+#events #thisweek .vevent{font-size:1.0em;margin-left:100px;max-width:28em;}#events #thisweek .vevent .details{font-size:.7em;}
 #events .vevent{margin-left:20px;}
 #events .tags a{font-size:small;background-color:#EEE;color:black;text-decoration:none;}
 #events h3{display:inline;}
@@ -52,7 +52,7 @@ form.egform fieldset abbr{color:#7b0101;font-size:20px;font-weight:bold;line-hei
 form.egform fieldset label abbr{display:block;font-size:23px;padding:0;position:absolute;top:10px;right:60px;width:16px;}
 form.egform fieldset input:focus,form.egform fieldset textarea:focus,form.egform fieldset select:focus{border-color:#636d77;}
 form.egform fieldset span.help{padding-top:5px;padding-bottom:5px;display:block;}
-div.row{min-width:800px;width:80%;margin-left:10%;}
+div.row{min-width:800px;margin-left:10px;}
 #location_details #map_canvas{height:350px;background-color:grey;display:block;}
 #footer{padding-top:25px;padding-bottom:25px;text-align:left;font-weight:bold;}
 #pagination{padding-top:30px;}
