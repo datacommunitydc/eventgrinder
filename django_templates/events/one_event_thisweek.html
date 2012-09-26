@@ -1,7 +1,7 @@
 {% load event_tags %}
 {% load humanize %}
    <div class="vevent hentry">
-	<h3 class="summary entry-title">{{ event|eventlink|safe }}</h3>
+	<h3 class="summary ">{{ event|eventlink|safe }}</h3>
 	
 	{% for tag in event.tags %}
 	{% ifequal forloop.counter 1 %}
@@ -15,7 +15,7 @@
 
 	{% endfor %}
 		
-	<div class="details entry-content">	
+	<div class="details ">	
 	{% if event.allday %}
 	<abbr class="dtstart" title="{{event.start.isoformat}}Z">All Day</abbr>
 	{% else %}
