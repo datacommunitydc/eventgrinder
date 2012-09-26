@@ -9,6 +9,7 @@ from events.forms import EventBasicsForm
 
 from google.appengine.api.users import get_current_user
 from account.utility import profile_required, get_current_profile
+from account.utility import userlevel_required
 from eventsite import site_required
 from django.core.urlresolvers import reverse
 from google.appengine.ext import db
@@ -134,3 +135,10 @@ def event_queue(request):
     has_pending_links=Link.all().filter('status =','submitted').get()
     return render_to_response('events/queue.html', locals(), context_instance=RequestContext(request))
     
+@userlevel_required(10)
+def manage_events(request):
+    timezone=pytz.timezone(request.site.timezone)
+    today=utc.localize(datetime.utcnow()).astimezone(timezone).date()
+    events = request.site.event_set.filter('status = ', 'approved')
+    future_events = events.filter('local_start >=', today).order('local_start').fetch(50)
+    return render_to_response('events/manage.html', locals(), context_instance=RequestContext(request))
