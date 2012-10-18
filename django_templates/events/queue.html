@@ -64,7 +64,7 @@ $(function(){
 		{% endfor %}
 	</ul>	
 	{% if user.is_editor and submitted_icals %}
-<a href="{% url manage-sources %}">there are pending souces</a><br/>
+<a href="{% url manage-sources %}">there are pending sources</a><br/>
 {% endif %}
 {% if user.is_editor and has_pending_links %}
 <a href="/links/review">there are pending links</a><br/>

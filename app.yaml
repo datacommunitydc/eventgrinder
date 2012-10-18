@@ -1,5 +1,5 @@
 application: dataeventsdc
-version: newhomepage
+version: embeddable
 runtime: python
 api_version: 1
 
