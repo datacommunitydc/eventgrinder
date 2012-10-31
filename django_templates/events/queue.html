@@ -60,11 +60,11 @@ $(function(){
 		
 		</li>
 		{% empty %}
-	   No pending events! you should <a href="{% url add-event %}">add one</a>.
+	   No pending events! You should <a href="{% url add-event %}">add one</a>.
 		{% endfor %}
 	</ul>	
 	{% if user.is_editor and submitted_icals %}
-<a href="{% url manage-sources %}">there are pending souces</a><br/>
+<a href="{% url manage-sources %}">there are pending sources</a><br/>
 {% endif %}
 {% if user.is_editor and has_pending_links %}
 <a href="/links/review">there are pending links</a><br/>
