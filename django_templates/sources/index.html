@@ -6,12 +6,16 @@
 {% block content %}
 
 <div class="row">
-	<div class="cell position-0 width-12">
-<h2>event sources</h2>
+	<div class="cell position-0 width-10">
+<h2>Event Sources</h2>
 {% if user.is_editor %}
-<a href="{% url manage-sources %}">manage sources</a>
-{% endif %}
+<ul>
+<li><a href="{% url manage-sources %}">Manage</a>
+<li><a href="{% url add-source %}">Add</a>
+</ul>
+{% else %}
 <p> Many of the events on {{request.site.name}} come from these calendars. Thank you! You can also <a href="{% url add-source %}">suggest one</a>.</p>
+{% endif %}
 
 {% for calendar in live_icals %}
 
@@ -43,7 +47,7 @@ No sources yet!
 </p>
 </div>
 
-<div class="cell position-12 width-4">
+<div class="cell position-10 width-6">
 		{% include "eventsite/sidebar.html" %}
 	</div>
 

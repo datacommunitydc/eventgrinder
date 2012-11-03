@@ -141,6 +141,9 @@
 	<div id="account_tools">
     <a href="{% url front-page %}">Home</a>
 	<a href="{% url add-event %}">Add event</a>
+    {% if user.is_editor %}
+    <a href="{% url manage-event %}">Manage events</a>
+    {% endif %}
     {% if user %}
     <a href="{% url event-queue %}">Queue</a>
     {% endif %}
@@ -162,9 +165,9 @@
 	
     <div class="main">
 	<div class="content ">
-	<h1 id="title">
+	<!-- <h1 id="title">
 		<a href="{% url front-page %}">
-			<!-- {% if site.logo_asset_href %}
+			{% if site.logo_asset_href %}
 			<img src="{{site.logo_asset_href }}" alt="{{ site.name }}">
 			{% else %}
 			{{ site.name }}
@@ -173,7 +176,7 @@
 			<!-- {% if site.twitter %} 
 			<div>follow @{{site.twitter}}!</div> {% endif %}
 			 -->
-	
+	   
 	</div>
 	
 
