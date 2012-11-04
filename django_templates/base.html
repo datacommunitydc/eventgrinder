@@ -94,6 +94,16 @@
 
 
    }
+   .header-title{
+     float: left;
+     font-size: 50px;
+     font-family: sans-serif;
+     color: black;
+     margin-top: 27px;
+     margin-left: 10px;
+   }
+
+
   </style>
    </HEAD>
      <body class="home blog two-column right-sidebar custom-background" id = "eventgrinder">
@@ -104,53 +114,69 @@
     <img src="http://datacommunitydc.org/blog/wp-content/uploads/2012/08/DC2logo-cluster-name-100px.png" class="dc2-icon" style = "float: left;  margin-right: 10px; " alt="Group Icon"></a>
     <!-- <h1 id="site-title"><a href="http://datacommunitydc.org/blog/" title="Data Community DC - supporting the analytics community with events and more" rel="home">Data Community DC</a></h1>
       <h2 id="site-description">supporting the analytics community with events and more</h2> -->
-      </hgroup>
+       <a class="header-title" href="http://events.datacommunitydc.org">Events</a>
+   </hgroup>
       <div class="header-desc fright"><p></p></div>
       <div class="clear"></div>
-
-      <div class= "fleft">
-        <h2 id="site-description">supporting the analytics community with events and more</h2>
-
-      </div>
-      <div class="social-icons fright">
-
-          
-          
-      </div><div class="clear"></div>
+      <div class= "fleft"></div> 
+      <div class="social-icons fright"></div>
+      <div class="clear"></div>
       </header>
 
       <nav>
-        <div class="menu"><ul><li class="page_item page-item-5"><a href="http://datacommunitydc.org/blog/about/">About</a></li><li class="page_item page-item-7"><a href="http://datacommunitydc.org/blog/data-science-dc/">Data Science DC</a></li><li class="page_item page-item-9"><a href="http://datacommunitydc.org/blog/r-users-dc/">R Users DC</a></li></ul></div>
+        <!-- TO UPDATE SITE MENU:
+             COPY/PASTE FROM RENDERED SITE! -->
+        <div class="menu-wplook-main-menu-container"><ul id="menu-wplook-main-menu" class="menu"><li id="menu-item-94" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-94"><a href="http://datacommunitydc.org/blog/about/" >About</a></li>
+<li id="menu-item-92" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-92"><a href="http://datacommunitydc.org/blog/r-users-dc/" >R Users DC</a></li>
+<li id="menu-item-93" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93"><a href="http://datacommunitydc.org/blog/data-science-dc/" >Data Science DC</a></li>
+<li id="menu-item-117" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-117"><a href="http://datacommunitydc.org/blog/data-business-dc/" >Data Business DC</a></li>
+<li id="menu-item-91" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-91"><a href="http://datacommunitydc.org/blog/subscribe/" >Newsletter</a></li>
+<li id="menu-item-90" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-90"><a href="http://events.datacommunitydc.org/" >Events</a></li>
+<li id="menu-item-191" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-191"><a href="http://datacommunitydc.org/blog/jobs/">Jobs</a></li>
+</ul></div>
           <div class="left-corner"></div>
             <div class="right-corner"></div>
             </nav>
 	
 	<div id="account_tools">
-	
-	
-	 <a href="{% url add-event %}">add an event</a>
-	 <a href="{% url event-queue %}">event queue</a>
-	<a href="{% url sources-index %}">sources</a>
-	<a href="mailto:info@datacommuntydc.org">feedback</a>
-	
+    <a href="{% url front-page %}">Home</a>
+	<a href="{% url add-event %}">Add event</a>
+    {% if user.is_editor %}
+    <a href="{% url manage-event %}">Manage events</a>
+    {% endif %}
+    {% if user %}
+    <a href="{% url event-queue %}">Queue</a>
+    {% endif %}
+	<a href="{% url sources-index %}">Sources</a>
+    {% if user.is_editor %}
+    <a href="{% url admin-home %}">Admin</a>
+    <a href="{% url manage-users %}">Users</a>
+    {% else %}
+	<a href="mailto:info@datacommuntydc.org" target="_blank">Feedback</a>
+    <a href="http://datacommunitydc.org/blog/2012/09/new-dc-data-events-listing/">About</a>
+    {% endif %}
+    <a href="{% url account-edit %}">Account</a>
+    {% if user %}
+    <a href="{{ logout }}">Logout</a>
+    {% endif %}
 	</div>
 	
 	
 	
     <div class="main">
 	<div class="content ">
-	<h1 id="title">
+	<!-- <h1 id="title">
 		<a href="{% url front-page %}">
 			{% if site.logo_asset_href %}
 			<img src="{{site.logo_asset_href }}" alt="{{ site.name }}">
 			{% else %}
 			{{ site.name }}
 			{% endif %}
-			</a> </h1>
-			{% if site.twitter %} 
+			</a> </h1> -->
+			<!-- {% if site.twitter %} 
 			<div>follow @{{site.twitter}}!</div> {% endif %}
-			
-	
+			 -->
+	   
 	</div>
 	
 
