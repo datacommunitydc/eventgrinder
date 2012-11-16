@@ -1,5 +1,5 @@
 cron:
-- description: start getting icals
-  url: /sources/start_fetch_icals/
+- description: start getting icals - revised
+  url: /sources/fetch_icals/
   schedule: every 2 hours
 
