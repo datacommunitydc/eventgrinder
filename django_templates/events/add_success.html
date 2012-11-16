@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load cdn_helper %}
+
+{% block subtitle %}Add an Event{% endblock %}
+
+{% block headextra %}
+
+<script src="{% versioned "/static/jquery/js/jquery-ui-1.8rc3.custom.min.js" %}"></script>
+
+<link rel="stylesheet" href="{% versioned "/static/jquery/css/smoothness/jquery-ui-1.8rc3.custom.css" %}"/>  
+<script src="{% versioned "/static/date.js" %}"></script>
+<script src="{% versioned "/static/jquery.NobleCount.min.js" %}"></script>
+<script src="{% versioned "/static/event-add.js" %}"></script>
+
+
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="cell position-0 width-16">
+<h2>Event Added!</h2>
+
+
+<h3>Once your submission is reviewed it will be on the front page, so if don't see it immediately tis' why. </h3>
+
+
+
+<p><strong>even better</strong>: <a href="{% url add-source %}">submit an iCalendar URL</a>, and we'll check it every day for new events. If your group uses Meetup, Upcoming, Eventful, or Google Calendar, you've got one!
+	</p>
+
+	</div>
+</div>
+
+	
+	
+	
+	</div>
+
+
+
+</div>
+
+
+
+{% endblock %}
