@@ -12,6 +12,7 @@ from datetime import datetime
 import logging
 import namespace_registry
 
+from google.appengine.api import mail
 import simplejson
 
 @profile_required
@@ -22,32 +23,42 @@ def add_source(request):
             form.save()
             messages.add_message(request, messages.INFO, "Thanks for submitting an iCal!")
             if request.profile.userlevel < 10 :
+
+                mail.send_mail(sender="Events bot ANGRY <dennison.john@gmail.com>",
+                                            to="The Laziest Louts Ever <info@datacommunitydc.org>",
+                                            #to="The Laziest Louts Ever <dennison.john@gmail.com>",
+                                            subject="New Source Added, now get off your ass!",
+                                            body="""
+New Source! Needs Review: http://events.datacommunitydc.org/sources/manage/
+
+The Angry Server.
+                        """)
                 return HttpResponseRedirect('/')
             else:
                 return HttpResponseRedirect('/sources/manage/')
-            
+
         else:
             return render_to_response('sources/add.html', locals(), context_instance=RequestContext(request))
-    
-    
+
+
     form=ICalendarEditForm()
     return render_to_response('sources/add.html', locals(), context_instance=RequestContext(request))
-    
+
 @site_required
 def sources(request):
     live_icals=request.site.icalendarsource_set.filter('status =', 'approved')
     return render_to_response('sources/index.html', locals(), context_instance=RequestContext(request))
-    
-    
-    
+
+
+
 @site_required
 def opml(request):
     live_icals=request.site.icalendarsource_set.filter('status =', 'approved')
     response= render_to_response('sources/index.opml', locals(), context_instance=RequestContext(request))
     response['Content-Type']='text/xml'
     return response
-    
-    
+
+
 @site_required
 def json(request):
     live_icals=request.site.icalendarsource_set.filter('status =', 'approved')
@@ -57,16 +68,16 @@ def json(request):
     response=HttpResponse(simplejson.dumps(export))
     response['Content-Type']='application/json'
     return response
-    
-    
-    
+
+
+
 @userlevel_required(10)
 def manage_sources(request):
     submitted_icals=request.site.icalendarsource_set.filter('status =', 'submitted')
     live_icals=request.site.icalendarsource_set.filter('status =', 'approved')
     return render_to_response('sources/manage.html', locals(), context_instance=RequestContext(request))
 
-@userlevel_required(10)    
+@userlevel_required(10)
 def save_ical(request):
     if request.method == 'POST':
         form=ICalApprovalForm(request.POST)
@@ -74,14 +85,14 @@ def save_ical(request):
             form.save()
             messages.add_message(request, messages.INFO, "saved your change")
             return HttpResponseRedirect('/sources/manage')
-            
+
         else:
             messages.add_message(request, messages.INFO, "something went wrong!")
             return HttpResponseRedirect('/sources/manage')
-            
-            
+
+
 def start_fetch_icals(request):
-    
+
     for ns in namespace_registry.all():
         set_namespace(ns.ns)
         logging.warning('namespace: %s'% get_namespace())
