@@ -115,7 +115,7 @@ INSTALLED_APPS = (
 	     'assets',
 	     'django.contrib.formtools',
 	     'django.contrib.messages',
-	     
+
 #    'django.contrib.auth',
 #    'django.contrib.contenttypes',
 #    'django.contrib.sessions',

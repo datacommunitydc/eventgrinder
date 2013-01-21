@@ -19,7 +19,7 @@ urlpatterns = patterns('',
       url(r'^parse_one_gdata/$', 'events.tasks.parse_one_gdata'),
       url(r'^start_expanding_recurring_events/$', 'events.tasks.start_expanding_recurring_events'),
       url(r'^expand_recurring_events/$', 'events.tasks.expand_recurring_events')
-      
-      
+
+
 )
 

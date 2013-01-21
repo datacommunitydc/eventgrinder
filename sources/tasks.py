@@ -1,4 +1,5 @@
 from models import ICalendarSource
+from google.appengine.api.namespace_manager import set_namespace, get_namespace
 from django.http import HttpResponse
 from dateutil.parser import parse
 from google.appengine.api.labs import taskqueue
@@ -10,17 +11,18 @@ import logging, traceback
 from google.appengine.ext import db
 from google.appengine.api import memcache
 from google.appengine.api import urlfetch
+import datetime
 
 import gdata.calendar
 
 from vobject.icalendar import stringToDate, stringToDateTime
 
-# DeadlineExceededError can live in two different places 
-try: 
-  # When deployed 
-  from google.appengine.runtime import DeadlineExceededError 
-except ImportError: 
-  # In the development server 
+# DeadlineExceededError can live in two different places
+try:
+  # When deployed
+  from google.appengine.runtime import DeadlineExceededError
+except ImportError:
+  # In the development server
   from google.appengine.runtime.apiproxy_errors import DeadlineExceededError
 
 
@@ -42,23 +44,39 @@ def split_gdata(request):
                 source_cache_key=request.POST.get('cache_key')
                 cache_key=source_cache_key +"-"+ str(cal_count)
                 memcache.set(cache_key, gevent.ToString(),1200)
-                
+
                 params=params={'cache_key': cache_key,
                                 'ical_key': request.POST['ical_key']}
                 taskqueue.add(url='/events/parse_one_gdata/',
                                params=params,
                               name=cache_key,countdown=30)
-    
-    
+
+
     except urlfetch.DownloadError:
         raise
-        
+
     except Exception,e:
                 logging.error("%s in \n%s"% (traceback.format_exc(),str(request.POST)))
-    
-    return HttpResponse("OK")
-    
 
+    return HttpResponse("OK")
+
+
+def fetch_icals_test(request):
+
+
+    set_namespace(get_namespace())
+    logging.warning('namespace: %s'% get_namespace())
+    try:
+        logging.warning("Starting New Ical fetch thing")
+        q=ICalendarSource.all().filter('status = ', 'approved')
+        logging.warning(str(q))
+
+        for cal in q:
+                cal.fetch()
+                logging.warning(str(cal))
+    except Exception,e:
+                logging.error("AHHHHHHHHHHHHHH Ical ting failed - %s in \n%s"% (traceback.format_exc(),str(request.POST)))
+    return HttpResponse("OK")
 
 def fetch_icals(request):
     try:
@@ -70,7 +88,7 @@ def fetch_icals(request):
             if cursor:
                 q=q.with_cursor(cursor)
             cals= q.fetch(1)
-            if cals: 
+            if cals:
                 params={'cursor': q.cursor(),
                         'started': started}
                 taskqueue.add(url='/sources/fetch/', params=params,)
@@ -80,14 +98,14 @@ def fetch_icals(request):
                 except:
                     logging.warning("failed fetching %s" % ical.ical_href)
                     raise
-                
+
     except Exception,e:
                 logging.error("%s in \n%s"% (traceback.format_exc(),str(request.POST)))
     return HttpResponse("OK")
-     
-    
+
+
 def split_ical(request):
-    
+
 
 
     def is_future(ical):
@@ -101,7 +119,7 @@ def split_ical(request):
         try:
             dateobject= parse(ical[start_line+8:end_line])
         except ValueError:
-            try: 
+            try:
                 dateobject= stringToDateTime(ical[start_line+8:end_line])
             except:
                 logging.warning("Could not parse DTSTART %s" % ical[start_line+8:end_line])
@@ -113,14 +131,14 @@ def split_ical(request):
             diff= datetime.now() - dateobject
 
         return diff < timedelta(1)
-    
-    
-    
+
+
+
     if request.method == 'POST':
         key=db.Key(request.POST.get('ical_key'))
         source=ICalendarSource.get(key)
 
-        
+
         def split_ical_file(ical):
             first_vevent_start=ical.find('BEGIN:VEVENT')
             cal_meta=ical[0:first_vevent_start]
@@ -134,14 +152,14 @@ def split_ical(request):
                     return (cal, end)
                 else:
                     return(None, None)
-            vevent, index=next_vevent(first_vevent_start)   
+            vevent, index=next_vevent(first_vevent_start)
             while vevent:
                 yield vevent
                 vevent, index=next_vevent(index)
         try:
             ical_source=memcache.get(request.POST.get('cache_key'))
             memcache.delete(request.POST.get('cache_key'))
-            
+
             if not ical_source:
                 logging.error("nothing in cache")
                 return HttpResponse("nothing in cache")
@@ -153,15 +171,15 @@ def split_ical(request):
                         source_cache_key=request.POST.get('cache_key')
                         cache_key=source_cache_key +"-"+ str(cal_count)
                         memcache.set(cache_key, event_ical,1200)
-                        
+
                         params=params={'cache_key': cache_key,
                                         'ical_key': request.POST['ical_key']}
                         logging.warning(params)
                         taskqueue.add(url='/events/parse_one_event/',
                                        params=params,
                                       name=cache_key,countdown=30)
-                        
-                                                                    
+
+
         except DeadlineExceededError:
                    return HttpResponse("Deadline Exceeded!")
         except Exception,e:
