@@ -36,15 +36,15 @@ class ICalendarSource(db.Model):
     last_fetch=db.DateTimeProperty(required=False)
     content=db.TextProperty(required=False)
     is_rssfeed=db.BooleanProperty()
-    
+
     @property
     def approval_form(self):
         return sources.forms.ICalApprovalForm(initial={'trusted': self.trusted, 'tags': ','.join(self.default_tags)})
-    
+
     @DerivedProperty
     def slug(self):
-        return str(slugify(self.name))   
-        
+        return str(slugify(self.name))
+
     def fetch(self,started=None, timestamp=None):
         format_start="%Y%m%d%H%M"
         if not started: started=str(datetime.now())
@@ -52,7 +52,7 @@ class ICalendarSource(db.Model):
         if self.ical_href.startswith('http://www.google.com/calendar/ical/'):
             gcal_id=unquote(self.ical_href[36:].split('/')[0])
             query = gdata.calendar.service.CalendarEventQuery(gcal_id, 'public', 'full-noattendees')
-            query.start_min= self.site.today.strftime("%Y-%m-%d") 
+            query.start_min= self.site.today.strftime("%Y-%m-%d")
             query.recurrence_expansion_end=(date.today()+relativedelta(months=3)).strftime("%Y-%m-%d")
             query.start_max=(date.today()+relativedelta(months=3)).strftime("%Y-%m-%d")
             query.singleevents='true'
@@ -62,7 +62,7 @@ class ICalendarSource(db.Model):
                 self.last_fetch=datetime.now()
                 self.put()
                 cache_key="%s-%s-%s" %(self.site.slug, self.slug,timestamp)
-                memcache.add(cache_key, result.content.decode(detection['encoding']),600) 
+                memcache.add(cache_key, result.content.decode(detection['encoding']),600)
                 logging.warning("cached gdata with key %s"% cache_key)
                 taskqueue.add(url='/sources/split_gdata/', params={'ical_key': self.key(),
                                                                   'cache_key':cache_key,
@@ -70,20 +70,20 @@ class ICalendarSource(db.Model):
                                                                   name=cache_key
                                                                   )
                 logging.warning("enqueued splitting of %s" % self.ical_href)
-            return
-        
-        result=urlfetch.fetch(self.ical_href, allow_truncated=True, deadline=5)
-        if result.status_code == 200:
-            detection=chardet.detect(result.content)
-            self.last_fetch=datetime.now()
-            self.put()
-            cache_key="%s-%s-%s" %(self.site.slug, self.slug,timestamp)
-            memcache.add(cache_key, result.content.decode(detection['encoding']),600) 
-            logging.warning("cached ical with key %s"% cache_key)
-            taskqueue.add(url='/sources/split_ical/', params={'ical_key': self.key(),
-                                                              'cache_key':cache_key,
-                                                              'timestamp':timestamp},
-                                                              name=cache_key
-                                                              )
-            logging.warning("enqueued splitting of %s" % self.ical_href)
-          
+
+        else:
+            result=urlfetch.fetch(self.ical_href, allow_truncated=True, deadline=5)
+            if result.status_code == 200:
+                detection=chardet.detect(result.content)
+                self.last_fetch=datetime.now()
+                self.put()
+                cache_key="%s-%s-%s" %(self.site.slug, self.slug,timestamp)
+                memcache.add(cache_key, result.content.decode(detection['encoding']),600)
+                logging.warning("cached ical with key %s"% cache_key)
+                taskqueue.add(url='/sources/split_ical/', params={'ical_key': self.key(),
+                                                                'cache_key':cache_key,
+                                                                'timestamp':timestamp},
+                                                                name=cache_key
+                                                                )
+                logging.warning("enqueued splitting of %s" % self.ical_href)
+        return
