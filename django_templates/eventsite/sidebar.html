@@ -1,19 +1,5 @@
 
 
-	<div>
-	
-		
-	</div>
-		<div> <!-- class="cell position-0 width-16" > -->
-
-			<form method="POST" action="/jumpto/" class="jumptoform" novalidate>
-				<label>Select a day: </label><input type="date" name="jumptodate" value="" placeholder="{{site.today|date:'n/j/Y'}}" class="datepicker"/>
-					<input type="submit" value="Go!">
-				</form>
-
-
-	
-	</div>
 	<div id="ical">Get the <a href="webcal://{{site.host}}/ical">iCal</a>
 	or <a href="/thisweek.xml">RSS feed</a>
 	</div>
@@ -25,18 +11,4 @@
 		</ul>
 	</div>
 
-
-	{% if links %}
-	<div>
-	
-	<h2>Community Links</h2>
-	<ul id="links">
-	{% for link in links %}
-	<li><a href="{{link.href}}">{{link.name}}</a></li>
-	{% endfor %}
-	(<a href="/links/add" id="addlink">Submit a link</a>)
-	</div>
-	{% endif %}
-	
-</div>
 
