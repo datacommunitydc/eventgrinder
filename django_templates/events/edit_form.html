@@ -6,9 +6,10 @@
 	from:<input type="text" name="start" value="{{event.local_start|date:"m/d/Y h:i A" }}" size=20/>
 	 until <input type="text" name="end" value="{{event.local_end|date:"m/d/Y h:i A" }}" size=20/><br/>
 	cost: <input type="text" name="cost" value="{{event.cost|default:""}}" size=40/><br/>
+    tags: <input type="text" name="tags" value="{% for tag in event.tags %}{{tag}} {% endfor %}" size=20/><br/>
 	</div>
 	<div class="approval">
-	<input type="hidden" name="tags" value=""/>
+	<!-- <input type="hidden" name="tags" value=""/> -->
 	<input type="hidden" name="event_key" value="{{event.key}}">
 	<input type="hidden" name="return" value="{{request.path}}">	
     <input type="Submit" name="button" value="Save">

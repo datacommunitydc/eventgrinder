@@ -1,6 +1,6 @@
 {% load event_tags %}
 {% load humanize %}
-   <div class="vevent hentry">
+   <div class="vevent hentry {% for tag in event.tags %}{{tag}} {% endfor %}">
 	<h3 class="summary ">{{ event|eventlink|safe }}</h3>
 	
 		

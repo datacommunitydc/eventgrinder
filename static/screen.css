@@ -10,8 +10,12 @@ table,tbody,tr,td{border-color:white;}
 #events #thisweek{margin-bottom:5px;}#events #thisweek .addthis_toolbox{margin-bottom:5px;}
 #events #thisweek h2{margin:2px 0px 0px -5px;font-size:.8em;float:left;width:80px;text-align:right;color:gray;font-weight:normal;}
 #events #thisweek h3{margin-top:15px;margin-bottom:15px;}
-#events #thisweek .vevent{font-size:1.0em;margin-left:100px;max-width:28em;}#events #thisweek .vevent .details{font-size:.7em;}
+#events #thisweek .vevent{font-size:1.0em;margin-left:100px;max-width:28em;}
+#events #thisweek .vevent .details{font-size:.7em;}
 #events .vevent{margin-left:20px;}
+#events #thisweek .dc2{padding-left:3px; border-left-style:solid;border-color:red;border-width:3px;}
+#events #thisweek .sponsored{padding-left:3px; border-left-style:solid;border-color:Gold;border-width:3px;}
+#events #thisweek .hackathon{padding-left:3px; border-left-style:solid;border-color:gray;border-width:3px;}
 #events .tags a{font-size:small;background-color:#EEE;color:black;text-decoration:none;}
 #events h3{display:inline;}
 #events h1{margin:10px 0px 10px 0px;padding:5px;border-bottom:1px dashed black;border-top:1px dashed black;}#events h1 a{color:black;text-decoration:none;}
