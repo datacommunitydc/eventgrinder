@@ -8,6 +8,10 @@ from pytz.gae import pytz
 import pychimp
 utc=pytz.timezone('UTC')
 
+class Sponsors(db.Model):
+    img=db.LinkProperty(required=True)
+    link=db.LinkProperty(required=True)
+    txt=db.TextProperty(required=False)
 
 class SitesMailchimp(db.Model):
     apikey=db.TextProperty(required=True)

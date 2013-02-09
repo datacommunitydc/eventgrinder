@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.cache import cache_page
 
 from eventsite import site_required
-from eventsite.models import Eventsite
+from eventsite.models import Eventsite, Sponsors
 import events.models
 from pytz.gae import pytz
 from datetime import datetime, timedelta, time
@@ -154,7 +154,8 @@ def front_page(request, tag=None):
     start=request.site.today
     logging.warning("rendering front page of %s starting %s" % (request.site.name, request.site.today+request.site.tz.utcoffset(request.site.tz)))
     upcoming=Event.all().filter('status = ', 'approved').order('local_start').filter('local_start >= ', start).fetch(30)
-    
+    sponsors=Sponsors.all()
+
     #upcoming=[event for event in upcoming if 
     response= render_to_response('eventsite/front-page.html', locals(), context_instance=RequestContext(request)) 
     response['Cache-Control']="public; max-age=300;"

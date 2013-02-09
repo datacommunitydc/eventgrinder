@@ -17,3 +17,16 @@
 iCal
 Google Calendar
 Meetup
+
+
+How to manually create new sponsors:
+
+from eventsite.models import Sponsors
+import google.appengine.ext.db
+
+x = Sponsors(img=db.Link("http://datacommunitydc.org/blog/wp-content/uploads/2012/08/DC2logo-cluster-name-100px.png"),
+link=db.Link("http://datacommunitydc.org"),txt="DC2FTW!!!")
+
+x.put()
+
+Or, use the GAE admin console; Datastore Viewer, Create.

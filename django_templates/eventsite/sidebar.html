@@ -15,8 +15,12 @@
 
 	<div>
 		<h2 style="margin-bottom:5px;">Sponsors</h2>
-		<p style="margin-left:10px;">
-			<a href="mailto:info@datacommunitydc.org">Talk to us!</a>
+        {% for sponsor in sponsors %}
+        <a style="margin-left:10px;" href="{{sponsor.link}}"><img src="{{sponsor.img}}"></a>
+        <p style="margin-left:10px;">{{sponsor.txt}}</p>
+        {% endfor %}
+		<p style="margin-left:10px; margin-top:10px;">
+			<a href="mailto:info@datacommunitydc.org">Want your logo here? Talk to us!</a>
 		</p>
 	</div>
 
