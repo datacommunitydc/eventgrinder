@@ -12,25 +12,25 @@ from models import Event
 from account.utility import get_current_profile
 
 utc=pytz.timezone('UTC')
-  
+
 
 REPEATS_CHOICES=[
 ( None, 'Does Note Repeat'),
 ('MONTHLY','Monthly'),
 ('WEEKLY', 'Weekly')
-]  
- 
+]
+
 
 class EventBasicsForm(forms.Form):
     title = forms.CharField(max_length=255, label="Event Name", widget=TextInput(attrs={'placeholder':''}))
-    link=forms.URLField(required=False, help_text="The URL to this event or groups official page.", 
+    link=forms.URLField(required=False, help_text="The URL to this event or groups official page.",
                         widget=TextInput(attrs={'placeholder':'http://whatever'}))
     description=forms.CharField(widget=forms.Textarea,
                             required=False)
     start_date= forms.DateField(help_text="The day the event starts",
                                 widget=DateInput(attrs={'placeholder':'click to select a date'}))
     start_time=forms.TimeField(widget=SelectTimeWidget(twelve_hr=True, minute_step=15), initial=time(18))
-    end_date= forms.DateField(required=False, 
+    end_date= forms.DateField(required=False,
                 help_text="The day the event ends",
                 widget=DateInput)
     end_time=forms.TimeField(widget=SelectTimeWidget(twelve_hr=True, minute_step=15),initial=time(21))
@@ -38,16 +38,16 @@ class EventBasicsForm(forms.Form):
                                 widget=TextInput(attrs={'placeholder':'100 Awesome St, Washington, DC'}),
                                 help_text="Leave blank if a location hasn't been decided on. Complete street addresses are awesome")
 
-                        
-    cost=forms.CharField(max_length=100, 
-        required=True, 
-        widget=TextInput(), 
+
+    cost=forms.CharField(max_length=100,
+        required=True,
+        widget=TextInput(),
         initial="Free",
         help_text="A price or range of prices. Discount codes are cool too.")
-    
-    
-    
-    
+
+
+
+
     def clean(self):
         data = self.cleaned_data
         #if not (data.get('link') or data.get('description')):
@@ -57,18 +57,18 @@ class EventBasicsForm(forms.Form):
         if data.has_key('start_date'):
             if (data['start_date'] < local_today) and ((data['end_date'] == None) or (data['end_date'] < local_today)):
                 self._errors["start_date"] = ErrorList(["This event occurs in the past"])
-                
+
         return super(EventBasicsForm, self).clean()
 
-        
-            
 
-        
+
+
+
     def save(self):
         site=get_site()
         timezone=pytz.timezone(site.timezone)
         cleaned_data=self.cleaned_data
-            
+
         profile=get_current_profile()
         if profile.userlevel > 9:
             credit_name, credit_link= "Staff", None
@@ -95,13 +95,13 @@ class EventBasicsForm(forms.Form):
         )
 
 
-            
-            
+
+
         event.put()
         return event
-        
 
-                                
 
-                                
-	
+
+
+
+

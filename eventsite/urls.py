@@ -22,5 +22,7 @@ urlpatterns = patterns('',
     url(r'^thisweek.xml$','eventsite.views.this_week_rss', name="weekly_rss"),
     url(r'^week-of/(?P<datestring>[\x20-\x7E]+)/(?P<format>[\x20-\x7E]+)$','eventsite.views.week_of_index', name="week-of-with-format"),
     url(r'^week-of/(?P<datestring>[\x20-\x7E]+)$','eventsite.views.week_of_index', name="week-of"),
+    url(r'^sponsor/$','eventsite.views.manage_sponsor', name="manage-sponsor"),
+    url(r'^sponsor/add$','eventsite.views.add_sponsor', name="add-sponsor"),
 )
 

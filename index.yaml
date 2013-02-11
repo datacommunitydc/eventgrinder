@@ -104,8 +104,7 @@ indexes:
   - name: status
   - name: last_fetch
 
-- kind: Sponsors
+- kind: Sponsor
   properties:
-  - name: enabled
-  - name: order
-    direction: desc
+  - name: active
+  - name: order_rank

@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.cache import cache_page
 
 from eventsite import site_required
-from eventsite.models import Eventsite, Sponsors
-import events.models
+from eventsite.models import Eventsite, Sponsor
+from eventsite.forms import SponsorForm
 from pytz.gae import pytz
 from datetime import datetime, timedelta, time
 from dateutil.relativedelta import *
@@ -13,6 +13,10 @@ from dateutil.rrule import *
 from dateutil.parser import parse
 import vobject, os
 from events.models import Event
+from google.appengine.ext import db
+
+from google.appengine.api.users import get_current_user
+from account.utility import userlevel_required
 
 import simplejson as json
 
@@ -26,7 +30,7 @@ utc=pytz.timezone('UTC')
 from google.appengine.api.users import get_current_user
 from google.appengine.api import memcache
 
-@cache_page(60 * 60)	
+@cache_page(60 * 60)
 @site_required
 def ical(request, tag=None):
     if request.site.hostnames:
@@ -45,21 +49,21 @@ def ical(request, tag=None):
     if tag:
         continuing=continuing.filter('tags = ', tag)
         events_soon=events_soon.filter('tags = ', tag)
-    
-    
+
+
     for event in chain(continuing,events_soon):
         vevent=cal.add('vevent')
         vevent.add('summary').value=event.title
         vevent.add('dtstart').value=utc.localize(event.start)
         vevent.add('dtend').value=utc.localize(event.end)
-        if event.link: 
+        if event.link:
             vevent.add('url').value=event.link
-            
-        if event.description: 
+
+        if event.description:
             vevent.add('description').value=event.description
         elif event.link:
             vevent.add('description').value="details at: %s" % event.link
-            
+
         if event.location:vevent.add('location').value=event.location
         vevent.add('uid').value="%s@%s" %(str(event.key()), host)
     response= HttpResponse(cal.serialize(), mimetype='text/calendar')
@@ -67,10 +71,10 @@ def ical(request, tag=None):
         response['Content-Disposition'] = 'attachment; filename=%s_%s.ics'% (tag,request.site.slug)
     else:
         response['Content-Disposition'] = 'attachment; filename=%s.ics'% request.site.slug
-    
+
     response['Cache-Control']="public; max-age=3600;"
     return response
-    
+
 @cache_page(60 * 60)
 @site_required
 def make_json(request, start=None):
@@ -78,7 +82,7 @@ def make_json(request, start=None):
         start=utc.localize(datetime.utcnow()).astimezone(request.site.tz).date()
     continuing=Event.all().filter('status = ', 'approved').filter('multiday =', True).filter('continues =', str(start))
     events_soon=Event.all().filter('status = ', 'approved').order('local_start').filter('local_start >= ', start)
-    
+
     flattened_events=[]
     for event in chain(continuing,events_soon):
         flattened_events.append({'title': event.title,
@@ -89,15 +93,15 @@ def make_json(request, start=None):
                     'cost':event.cost,
                     'credit_name':event.credit_name,
                     'credit_link':event.credit_link,})
-                    
+
     response= HttpResponse(json.dumps(flattened_events), mimetype='application/json')
     response['Cache-Control']="public; max-age=3600;"
     return response
-        
+
 
 def jumpto(request):
     datestring=request.POST.get('jumptodate')
-    
+
     try:
         parsed_day=parse(datestring)
         preceeding_monday=parsed_day+relativedelta(weekday=MO(-1))
@@ -107,7 +111,7 @@ def jumpto(request):
             href="/week-of/%s" %(preceeding_monday.strftime("%Y-%m-%d"))
     except:
         return HttpResponseRedirect('/')
-        
+
     return HttpResponseRedirect(href)
 
 
@@ -120,14 +124,14 @@ def week_of_index(request, datestring=None, format=None):
     end=start+relativedelta(weekday=SU)
     continuing=Event.all().filter('status = ', 'approved').filter('continues =', str(start)).filter('local_start < ', start).fetch(150)
     events_soon=Event.all().filter('status = ', 'approved').order('local_start').filter('local_start >= ', start).filter('local_start < ', begin_next_week).fetch(150)
-    
-    if format == 'newsletter': 
+
+    if format == 'newsletter':
         template='eventsite/newsletter.html'
     else:
         template='eventsite/week.html'
 
     return render_to_response(template, locals(), context_instance=RequestContext(request))
-        
+
 @cache_page(60 * 10)
 @site_required
 def this_week_rss(request):
@@ -138,13 +142,13 @@ def this_week_rss(request):
     end=start+relativedelta(weekday=SU)
     continuing=Event.all().filter('status = ', 'approved').filter('continues =', str(start)).filter('local_start < ', start).fetch(150)
     events_soon=Event.all().filter('status = ', 'approved').order('local_start').filter('local_start >= ', start).filter('local_start < ', begin_next_week).fetch(150)
-    
+
 
     template='eventsite/week.xml'
 
     response= render_to_response(template, locals(), context_instance=RequestContext(request),mimetype='application/rss+xml')
     response['Cache-Control']="public; max-age=3600;"
-    return response   
+    return response
 
 
 
@@ -154,13 +158,49 @@ def front_page(request, tag=None):
     start=request.site.today
     logging.warning("rendering front page of %s starting %s" % (request.site.name, request.site.today+request.site.tz.utcoffset(request.site.tz)))
     upcoming=Event.all().filter('status = ', 'approved').order('local_start').filter('local_start >= ', start).fetch(30)
-    sponsors=Sponsors.all().filter('enabled = ', True).order('-order')
+    sponsors=Sponsor.all().filter('active =', True).order('order_rank')
 
-    #upcoming=[event for event in upcoming if 
-    response= render_to_response('eventsite/front-page.html', locals(), context_instance=RequestContext(request)) 
+    #upcoming=[event for event in upcoming if
+    response= render_to_response('eventsite/front-page.html', locals(), context_instance=RequestContext(request))
     response['Cache-Control']="public; max-age=300;"
     return response
-      
 
 
+
+@userlevel_required(10)
+def manage_sponsor(request):
+    if request.method =='POST' and request.POST['button'] == 'Save':
+        logging.warning("Existing form:")
+        form=SponsorForm(request.POST)
+        logging.warning(request.POST)
+        logging.warning(str(form))
+        if form.is_valid():
+            form.save()
+    elif request.method =='POST' and request.POST['button'] == 'Delete':
+        sponsor_q = Sponsor.all().filter('__key__ =', db.Key(request.POST['sponsor_key']))
+        sponsor = sponsor_q.get()
+        sponsor.delete()
+    elif request.method =='POST' and request.POST['button'] == 'Enable':
+        sponsor_q = Sponsor.all().filter('__key__ =', db.Key(request.POST['sponsor_key']))
+        sponsor = sponsor_q.get()
+        logging.warning(str(sponsor))
+        sponsor.active = True
+        sponsor.put()
+    elif request.method =='POST' and request.POST['button'] == 'Disable':
+        sponsor_q = Sponsor.all().filter('__key__ =', db.Key(request.POST['sponsor_key']))
+        sponsor = sponsor_q.get()
+        sponsor.active = False
+        sponsor.put()
+
+    sponsors=Sponsor.all()
+
+    #upcoming=[event for event in upcoming if
+    response= render_to_response('eventsite/manage_sponsor.html', locals(), context_instance=RequestContext(request))
+    return response
+
+@userlevel_required(10)
+def add_sponsor(request):
+    #upcoming=[event for event in upcoming if
+    response= render_to_response('eventsite/add_sponsor.html', locals(), context_instance=RequestContext(request))
+    return response
 

@@ -8,22 +8,22 @@ from pytz.gae import pytz
 import pychimp
 utc=pytz.timezone('UTC')
 
-class Sponsors(db.Model):
+class Sponsor(db.Model):
     img=db.LinkProperty(required=True)
-    link=db.TextProperty(required=True)
-    txt=db.TextProperty(required=True)
-    enabled=db.BooleanProperty(required=True)
-    order=db.IntegerProperty(default=0)
+    link=db.LinkProperty(required=True)
+    txt=db.TextProperty(required=False)
+    order_rank=db.IntegerProperty(required=True, default= 99 )
+    active=db.BooleanProperty()
 
 class SitesMailchimp(db.Model):
     apikey=db.TextProperty(required=True)
     listid=db.TextProperty(required=False)
     listname=db.TextProperty(required=False)
-    
+
     @property
     def api(self):
         return pychimp.PyChimp(self.apikey)
-        
+
 
 
 class Eventsite(db.Model):
@@ -43,13 +43,13 @@ class Eventsite(db.Model):
     twitter=db.TextProperty(required=False)
     bsa_code=db.TextProperty(required=False)
     offline=db.BooleanProperty()
-    
+
     @property
     def chimp(self):
         return SitesMailchimp.all().ancestor(self).get()
-    
+
     def expire_assets(self):
-      
+
         envversion=os.environ['CURRENT_VERSION_ID']
         datestring=self.today.strftime('%b%d%y')
         for cache_key in ["front-page","ical", "latest-events-feed"]:
@@ -57,31 +57,31 @@ class Eventsite(db.Model):
             memcache.delete(complete_cache_key)
             logging.warning("expired cached page %s" % complete_cache_key)
 
-        
-    
+
+
     @property
     def tz(self):
         return pytz.timezone(self.timezone)
-    
+
     @property
     def host(self):
         if self.hostnames:
             return self.hostnames[0]
         else:
             return self.key_name
-    
+
     @property
     def today(self):
         timezone=self.tz
         return utc.localize(datetime.utcnow()).astimezone(timezone).date()
-    
+
     @property
     def link(self):
         if self.hostnames:
             return "http://%s/"% self.hostnames[0]
         else:
             return "http://%s/"% self.key().id_or_name()
-            
 
 
-    
+
+
