@@ -10,8 +10,10 @@ utc=pytz.timezone('UTC')
 
 class Sponsors(db.Model):
     img=db.LinkProperty(required=True)
-    link=db.LinkProperty(required=True)
-    txt=db.TextProperty(required=False)
+    link=db.TextProperty(required=True)
+    txt=db.TextProperty(required=True)
+    enabled=db.BooleanProperty(required=True)
+    order=db.IntegerProperty(default=0)
 
 class SitesMailchimp(db.Model):
     apikey=db.TextProperty(required=True)

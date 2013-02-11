@@ -154,7 +154,7 @@ def front_page(request, tag=None):
     start=request.site.today
     logging.warning("rendering front page of %s starting %s" % (request.site.name, request.site.today+request.site.tz.utcoffset(request.site.tz)))
     upcoming=Event.all().filter('status = ', 'approved').order('local_start').filter('local_start >= ', start).fetch(30)
-    sponsors=Sponsors.all()
+    sponsors=Sponsors.all().filter('enabled = ', True).order('-order')
 
     #upcoming=[event for event in upcoming if 
     response= render_to_response('eventsite/front-page.html', locals(), context_instance=RequestContext(request)) 

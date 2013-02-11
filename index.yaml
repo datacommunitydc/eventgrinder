@@ -103,3 +103,9 @@ indexes:
   properties:
   - name: status
   - name: last_fetch
+
+- kind: Sponsors
+  properties:
+  - name: enabled
+  - name: order
+    direction: desc

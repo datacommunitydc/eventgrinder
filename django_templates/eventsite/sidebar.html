@@ -16,12 +16,16 @@
 	<div>
 		<h2 style="margin-bottom:5px;">Sponsors</h2>
         {% for sponsor in sponsors %}
-        <a style="margin-left:10px;" href="{{sponsor.link}}"><img src="{{sponsor.img}}"></a>
-        <p style="margin-left:10px;">{{sponsor.txt}}</p>
+        <div style="margin-left:10px;margin-top:5px;">
+            <a href="{{sponsor.link}}" target="_blank">
+            {% if sponsor.img %}<img src="{{sponsor.img}}">{% endif %}
+            <p>{{sponsor.txt}}</p>
+            </a>
+        </div>
         {% endfor %}
-		<p style="margin-left:10px; margin-top:10px;">
+		<!-- <p style="margin-left:10px; margin-top:10px;">
 			<a href="mailto:info@datacommunitydc.org">Want your logo here? Talk to us!</a>
-		</p>
+		</p> -->
 	</div>
 
 
