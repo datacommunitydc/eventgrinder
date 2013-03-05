@@ -37,7 +37,7 @@ def add_series(request):
         if form.is_valid():
             form.save()
             if profile.userlevel < 9:
-                mail.send_mail(sender="Events bot ANGRY <dennison.john@gmail.com>",
+                mail.send_mail(sender="Events bot ANGRY <events@datacommunitydc.com>",
                                             to="The Laziest Louts Ever <info@datacommunitydc.org>",
                                             #to="The Laziest Louts Ever <dennison.john@gmail.com>",
                                             subject="New Series Created, now get off your ass!",
@@ -69,7 +69,7 @@ def add_event(request):
         if form.is_valid():
             form.save()
             if profile.userlevel < 9:
-                mail.send_mail(sender="Events bot ANGRY <dennison.john@gmail.com>",
+                mail.send_mail(sender="Events bot ANGRY <events@datacommunitydc.com>",
                                             to="The Laziest Louts Ever <info@datacommunitydc.org>",
                                             #to="The Laziest Louts Ever <dennison.john@gmail.com>",
                                             subject="New Series Created, now get off your ass!",
