@@ -24,7 +24,7 @@ def add_source(request):
             messages.add_message(request, messages.INFO, "Thanks for submitting an iCal!")
             if request.profile.userlevel < 10 :
 
-                mail.send_mail(sender="Events bot ANGRY <dennison.john@gmail.com>",
+                mail.send_mail(sender="Events bot ANGRY <events@datacommunitydc.com>",
                                             to="The Laziest Louts Ever <info@datacommunitydc.org>",
                                             #to="The Laziest Louts Ever <dennison.john@gmail.com>",
                                             subject="New Source Added, now get off your ass!",
